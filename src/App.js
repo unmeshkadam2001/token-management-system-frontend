@@ -18,7 +18,7 @@ const router = createBrowserRouter([
   { path: '/MLogin', element: <MLogin /> },
   { path: '/CounterExecutive', element: <CounterExecutive/> },
   { path: '/tokenGeneration', element: <TokenGeneration /> },
-
+  { path: '/CounterExecutive', element: <CounterExecutive /> },
 ])
 
 function App() {
