@@ -7,6 +7,7 @@ import TokenGeneration from './component/TokenGeneration';
 import ManagerHomePage from './component/ManagerHomePage';
 import AddServices from './component/AddServices';
 import AssignCounter from './component/AssignCounter';
+import CounterExecutive from './component/CounterExecutive';
 
 const router = createBrowserRouter([
   { path: '/', element: <HomePage /> },
@@ -16,7 +17,7 @@ const router = createBrowserRouter([
   { path: '/CELogin', element: <CELogin /> },
   { path: '/MLogin', element: <MLogin /> },
   { path: '/tokenGeneration', element: <TokenGeneration /> },
-
+  { path: '/CounterExecutive', element: <CounterExecutive /> },
 ])
 
 function App() {
