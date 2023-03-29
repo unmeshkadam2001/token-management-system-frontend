@@ -62,11 +62,10 @@ function AddServices() {
 
   return (
     <div>
-      <section class="overflow-auto bg-auto bg-gray-50 dark:bg-gray-900 ">
-        <div  class="mt-0 flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+      <section class=" bg-gray-50 dark:bg-gray-900 w-full flex flex-col items-center justify-center">
           <a
             href="#"
-            class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
+            class="flex items-center py-9 w-full justify-center text-2xl font-semibold text-gray-900 dark:text-white"
           >
             <img
               class="w-8 h-8 mr-2"
@@ -75,14 +74,14 @@ function AddServices() {
             ></img>
             Pratiti
           </a>
-          <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div class="relative p-6 space-y-4 md:space-y-6 sm:p-8">
+          <div class="mb-6 w-full bg-white rounded-lg shadow dark:border sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 h-max">
+            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Add Services
               </h1>
               <form
                 onSubmit={handleSubmit}
-                class="absolute overflow-auto space-y-4 md:space-y-6"
+                class="space-y-4 md:space-y-6"
                 action="#"
               >
                 <div>
@@ -191,7 +190,6 @@ function AddServices() {
               </form>
             </div>
           </div>
-        </div>
       </section>
     </div>
   );
