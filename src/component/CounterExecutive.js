@@ -16,6 +16,7 @@ export default function CounterExecutive() {
   const [counterId, setCounterId] = useState();
   const [resolvedResponse, setResolvedResponse] = useState();
   const [tokenIdOfSelected, setTokenIdOfSelected] = useState();
+  const [timeRemaining, setTimeRemaining] = useState(60);
 
   // setInterval(fetchQueue, 10000);
   // setInterval(fetchWaitingQueue, 10000);
@@ -30,13 +31,39 @@ export default function CounterExecutive() {
       });
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeRemaining((timeRemaining) => timeRemaining - 1);
+    }, 1000);
+    if (timeRemaining === 0) {
+      nextToken();
+      setTimeRemaining(60);
+    }
+    return () => clearInterval(timer);
+  }, [timeRemaining]);
+
+  useEffect(() => {
+    if (resolvedResponse) {
+      setTimeRemaining(60);
+    }
+  }, [resolvedResponse]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeRemaining((timeRemaining) => timeRemaining - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+  
   const fetchQueue = async() => {
-    await axios
+    await axios  
       .get(`http://localhost:8080/requestingQueue?counterId=${counterId}`)
       .then((response) => {
         setQueue(response.data);
         setDisplayQueueFlag(true);
         setDisplayWaitingQueueFlag(false);
+        setQueueFlag(true);
+        setWaitingQueueFlag(false);
         setTokenId(response.data[0].tokenId);
       }).catch(error => console.log(error));
   }
@@ -59,6 +86,8 @@ export default function CounterExecutive() {
       .then((response) => {
         console.log(response.data);
         setWaitingQueue(response.data);
+        setWaitingQueueFlag(true);
+        setQueueFlag(false);
         setDisplayWaitingQueueFlag(true);
         setDisplayQueueFlag(false);
       });
@@ -77,9 +106,9 @@ export default function CounterExecutive() {
           console.log(response.data);
         });
       console.log("kjfslkdhflksdfhlkdfhldskhdk");
+    }     
     }
-
-  }
+  
 
   function chooseFromWaitingQueue() {
     setWaitingQueueFlag(true);
@@ -132,11 +161,17 @@ export default function CounterExecutive() {
                       Counter Executive Dashboard
                     </span>
                   </a>
-                  <div className="flex md:order-2">
+                  <div class="flex  md:order-4">
+                    <button
+                      type="button"
+                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      Timer : {timeRemaining}
+                    </button>
                     <button
                       type="button"
                       onClick={logoutHandler}
-                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      class="ml-8 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       Logout
                     </button>
@@ -168,10 +203,10 @@ export default function CounterExecutive() {
             </div>
             <br></br>
             <br></br>
-            <div className="flex justify-center mt-10">
-              <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mr-4">
-                <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700">
-                  <div className="flex justify-end px-4 pt-4">
+            <div class="flex justify-center mt-10">
+              <div class="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mr-4">
+                <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-900 dark:border-gray-700">
+                  <div class="flex justify-end px-4 pt-4">
                     <button
                       id="dropdownButton"
                       data-dropdown-toggle="dropdown"
@@ -272,19 +307,28 @@ export default function CounterExecutive() {
                   </div>
                 </div>
               </div>
-              <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 ml-4">
-                <div className=" relative overflow-x-auto shadow-md ">
-                  {displayQueueFlag && (
-                    <table className="border-collapse border border-slate-500 w-full text-sm text-center  text-gray-500 dark:text-gray-400">
-                      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400">
+              <div class="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 ml-4">
+                <div class=" relative overflow-x-auto shadow-md ">
+                  {displayQueueFlag &&(
+                    <table class="border-collapse border border-slate-500 w-full text-sm text-center  text-gray-500 dark:text-gray-400">
+                      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-900 dark:text-gray-400">
                         <tr>
-                          <th className="border border-slate-600 px-6 py-3" scope="col" >
+                          <th
+                            class="border border-slate-600 px-6 py-3"
+                            scope="col"
+                          >
                             Token Id
                           </th>
-                          <th className="border border-slate-600 px-6 py-3" scope="col" >
+                          <th
+                            class="border border-slate-600 px-6 py-3"
+                            scope="col"
+                          >
                             Service Name
                           </th>
-                          <th className="border border-slate-600 px-6 py-3" scope="col" >
+                          <th
+                            class="border border-slate-600 px-6 py-3"
+                            scope="col"
+                          >
                             Service Id
                           </th>
                         </tr>
@@ -298,20 +342,30 @@ export default function CounterExecutive() {
                             >
                               {token.tokenId}
                             </td>
-                            <td className="border border-slate-600">{token.serviceDescription}</td>
-                            <td className="border border-slate-600">{token.serviceId}</td>
+                            <td class="border border-slate-600">
+                              {token.serviceDescription}
+                            </td>
+                            <td class="border border-slate-600">
+                              {token.serviceId}
+                            </td>
                           </tr>
                         </tbody>
                       ))}
                     </table>
                   )}
-                  {displayWaitingQueueFlag && waitingQueue.length != 0 && (
-                    <table className="border-collapse border border-slate-500 w-full text-sm text-center text-gray-500 dark:text-gray-400">
-                      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                  {displayWaitingQueueFlag && waitingQueue.length != 0 &&(
+                    <table class="border-collapse border border-slate-500 w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr className="mb-0">
-                          <th className="border border-slate-600 px-6 py-3" >Token Id</th>
-                          <th className="border border-slate-600 px-6 py-3" >Service Name</th>
-                          <th className="border border-slate-600 px-6 py-3" >Service Id</th>
+                          <th class="border border-slate-600 px-6 py-3">
+                            Token Id
+                          </th>
+                          <th class="border border-slate-600 px-6 py-3">
+                            Service Name
+                          </th>
+                          <th class="border border-slate-600 px-6 py-3">
+                            Service Id
+                          </th>
                         </tr>
                       </thead>
 
@@ -325,8 +379,12 @@ export default function CounterExecutive() {
                             >
                               {waitingQueue.tokenId}
                             </td>
-                            <td className="border border-slate-600">{waitingQueue.serviceDescription}</td>
-                            <td className="border border-slate-600">{waitingQueue.serviceId}</td>
+                            <td class="border border-slate-600">
+                              {waitingQueue.serviceDescription}
+                            </td>
+                            <td class="border border-slate-600">
+                              {waitingQueue.serviceId}
+                            </td>
                           </tr>
                         </tbody>
 
@@ -343,3 +401,5 @@ export default function CounterExecutive() {
     </>
   );
 }
+
+
