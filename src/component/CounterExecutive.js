@@ -1,5 +1,4 @@
 import axios from "axios";
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -18,10 +17,8 @@ export default function CounterExecutive() {
   const [resolvedResponse, setResolvedResponse] = useState();
   const [tokenIdOfSelected, setTokenIdOfSelected] = useState();
   const [timeRemaining, setTimeRemaining] = useState(60);
-
-  // setInterval(fetchQueue, 10000);
-  // setInterval(fetchWaitingQueue, 10000);
-
+  const [isPaused, setIsPaused] = useState(false);
+  const [startTimer, setStartTimer] = useState(false);
 
   useEffect(() => {
     let counterExecutiveId = localStorage.getItem("id");
@@ -34,40 +31,47 @@ export default function CounterExecutive() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeRemaining((timeRemaining) => timeRemaining - 1);
+      if (startTimer && !isPaused) {
+        setTimeRemaining((timeRemaining) => timeRemaining - 1);
+        if (timeRemaining === 0) {
+          nextToken();
+          setTimeRemaining(60);
+        }
+      }
     }, 1000);
-    if (timeRemaining === 0) {
-      nextToken();
-      setTimeRemaining(60);
-    }
     return () => clearInterval(timer);
-  }, [timeRemaining]);
+  }, [timeRemaining, isPaused, startTimer]);
 
   useEffect(() => {
     if (resolvedResponse) {
       setTimeRemaining(60);
+      setStartTimer(false);
     }
   }, [resolvedResponse]);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeRemaining((timeRemaining) => timeRemaining - 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+  function pauseCounter() {
+    setIsPaused(true);
+  }
+
+  function resumeCounter() {
+    setIsPaused(false);
+  }
 
   function isQueueEmpty(length) {
     if (length == 0) {
       toast.success("The Queue is Empty...", {
         autoClose: 1000,
-        icon: "😅"
-      })
-      toast.info("Please enter some tokens inside queue to use the given functionalities..!",{
-        delay:3000,
-        icon:"📥"
-      })
+        icon: "😅",
+      });
+      toast.info(
+        "Please enter some tokens inside queue to use the given functionalities..!",
+        {
+          delay: 3000,
+          icon: "📥",
+        }
+      );
       return true;
-    }else{
+    } else {
       return false;
     }
   }
@@ -83,12 +87,15 @@ export default function CounterExecutive() {
         setQueueFlag(true);
         setWaitingQueueFlag(false);
         setTokenId(response.data[0].tokenId);
-      }).catch(error => console.log(error));
-  }
+      })
+      .catch((error) => console.log(error));
+  };
 
   function fetchWaitingQueue() {
-
-    axios.get(`http://localhost:8080/requestingWaitingQueue?counterId=${counterId}`)
+    axios
+      .get(
+        `http://localhost:8080/requestingWaitingQueue?counterId=${counterId}`
+      )
       .then((response) => {
         if (!isQueueEmpty(response.data.length)) {
           console.log(response.data);
@@ -102,12 +109,11 @@ export default function CounterExecutive() {
   }
 
   function nextToken() {
-
     if (waitingQueueFlag == true) {
       const first = waitingQueue[0];
-      console.log(first.tokenId)
+      console.log(first.tokenId);
       setWaitingQueue(([first, ...rest]) => [...rest, first]);
-      console.log("inside next token waiting queue flag is true")
+      console.log("inside next token waiting queue flag is true");
       // fetchWaitingQueue();
     } else {
       fetchQueue();
@@ -117,21 +123,26 @@ export default function CounterExecutive() {
           console.log(response.data);
         });
     }
-
+    setTimeRemaining(60);
   }
 
   function chooseFromWaitingQueue() {
-    console.log("inside waiting queue flag...")
+    console.log("inside waiting queue flag...");
     setWaitingQueueFlag(true);
-    console.log(waitingQueueFlag, " :Flag status")
-    setQueueFlag(false)
+    console.log(waitingQueueFlag, " :Flag status");
+    setQueueFlag(false);
     setTokenIdOfSelected(waitingQueue[0].tokenId);
+
+    // start the timer
+    setTimeRemaining(60);
+    setStartTimer(true);
   }
 
   function chooseFromQueue() {
-    axios.get(`http://localhost:8080/processing?tokenId=${tokenId}`)
+    axios
+      .get(`http://localhost:8080/processing?tokenId=${tokenId}`)
       .then((response) => {
-        console.log("Status of topmost token changed to Processing...:)")
+        console.log("Status of topmost token changed to Processing...:)");
       });
     setQueueFlag(true);
     setWaitingQueueFlag(false);
@@ -139,21 +150,23 @@ export default function CounterExecutive() {
     console.log(
       "this is in choose from queue with queue[0] is  " + queue[0].tokenId
     );
+
+    // start the timer
+    setTimeRemaining(60);
+    setStartTimer(true);
   }
 
   function resolved() {
+    setTimeRemaining(60);
     axios
       .get(`http://localhost:8080/resolved?tokenId=${tokenIdOfSelected}`)
       .then((response) => {
         console.log(response.data);
         setResolvedResponse(response.data);
 
-        if (queueFlag)
-          fetchQueue();
-        else if (waitingQueueFlag)
-          fetchWaitingQueue();
+        if (queueFlag) fetchQueue();
+        else if (waitingQueueFlag) fetchWaitingQueue();
       });
-
   }
 
   function logoutHandler() {
@@ -162,9 +175,9 @@ export default function CounterExecutive() {
   }
 
   return (
-    <>
+    <div>
       <section className="bg-gray-50 dark:bg-gray-800">
-        {sessionStorage.getItem("accessToken") && (
+        {sessionStorage.getItem("accessToken") ? (
           <div>
             <div>
               <nav className="bg-white px-2 sm:px-4 py-2.5 dark:bg-gray-900 fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-600">
@@ -185,6 +198,20 @@ export default function CounterExecutive() {
                       className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                     >
                       Timer : {timeRemaining}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={pauseCounter}
+                      className="ml-8 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      Pause counter
+                    </button>
+                    <button
+                      type="button"
+                      onClick={resumeCounter}
+                      className="ml-8 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    >
+                      Resume Counter
                     </button>
                     <button
                       type="button"
@@ -289,14 +316,14 @@ export default function CounterExecutive() {
                         onClick={chooseFromQueue}
                         className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
                       >
-                        Queue
+                        Call from queue
                       </button>
                       <button
                         type="button"
                         onClick={chooseFromWaitingQueue}
                         className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
                       >
-                        Waiting Queue
+                        Call from Waiting Queue
                       </button>
                     </div>
                     <p className="text-sky-400">
@@ -387,7 +414,6 @@ export default function CounterExecutive() {
                         </tr>
                       </thead>
 
-
                       {waitingQueue.map((waitingQueue) => (
                         <tbody>
                           <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -405,7 +431,6 @@ export default function CounterExecutive() {
                             </td>
                           </tr>
                         </tbody>
-
                       ))}
                     </table>
                   )}
@@ -413,11 +438,11 @@ export default function CounterExecutive() {
               </div>
             </div>
           </div>
+        ) : (
+          (window.location.href = "http://localhost:3000/CELogin")
         )}
         <br></br>
       </section>
-    </>
+    </div>
   );
 }
-
-

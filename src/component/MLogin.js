@@ -1,8 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-
-
+import { useNavigate } from "react-router-dom";
 
 export default function MLogin() {
   const navigate = useNavigate();
@@ -19,6 +17,9 @@ export default function MLogin() {
 
   function validate() {
     if (username === "manager" && password === "manager07") {
+      localStorage.setItem("usernameManager", username);
+      localStorage.setItem("passwordManager", password);
+      sessionStorage.setItem("accessTokenManager", "true");
       navigate("/ManagerHomePage");
       // alert("success");
     } else {
@@ -28,7 +29,7 @@ export default function MLogin() {
 
   return (
     <div>
-      <section class="bg-gray-50 dark:bg-gray-900">
+      <section class="bg-gray-50 dark:bg-gray-900 h-screen">
         <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <a
             href="#"
@@ -84,11 +85,16 @@ export default function MLogin() {
                   ></input>
                 </div>
                 <div>
-                    <button style={{ marginLeft:"140px" }} type="button" onClick={validate} class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
-                        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                            Sign in
-                        </span>
-                    </button>
+                  <button
+                    style={{ marginLeft: "140px" }}
+                    type="button"
+                    onClick={validate}
+                    class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+                  >
+                    <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                      Sign in
+                    </span>
+                  </button>
                 </div>
               </form>
             </div>

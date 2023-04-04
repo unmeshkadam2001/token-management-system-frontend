@@ -1,8 +1,7 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
 
 export default function CELogin(props) {
   const navigate = useNavigate();
@@ -36,34 +35,35 @@ export default function CELogin(props) {
         sessionStorage.setItem("accessToken", "true");
         localStorage.setItem("id", response.data.id);
         if (response.data.status === true && response.data.id == 4) {
-          const resolveAfter3Sec = new Promise(resolve => setTimeout(resolve, 1000));
-          toast.promise(resolveAfter3Sec,
-            {
-              pending: 'Login is pending',
-              success: 'Login Successful 👌',
-              error: 'Login Rejected 🤯'
-            })
+          const resolveAfter3Sec = new Promise((resolve) =>
+            setTimeout(resolve, 1000)
+          );
+          toast.promise(resolveAfter3Sec, {
+            pending: "Login is pending",
+            success: "Login Successful 👌",
+            error: "Login Rejected 🤯",
+          });
           setTimeout(() => {
-            navigate("/CatchAll");      
+            navigate("/CatchAll");
           }, 1000);
-            
-        } else if(response.data.status === true) {
-          toast("Counter Executive Logged in Successfully!",{type:"success"})
-          toast("Welcome " + response.data.name + "!, You are good to go...",{
-            type:"success",
-            delay:5000,
-            
-          })
-          navigate("/CounterExecutive");      
-        }else{
-          toast("Invalid Credentials...😵")
+        } else if (response.data.status === true) {
+          toast("Counter Executive Logged in Successfully!", {
+            type: "success",
+          });
+          toast("Welcome " + response.data.name + "!, You are good to go...", {
+            type: "success",
+            delay: 5000,
+          });
+          navigate("/CounterExecutive");
+        } else {  
+          toast("Invalid Credentials...😵");
         }
       });
   }
 
   return (
     <div>
-      <section className="bg-gray-50 dark:bg-gray-900">
+      <section className="bg-gray-50 dark:bg-gray-900 h-screen">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <a
             href="#"
