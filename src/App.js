@@ -8,6 +8,9 @@ import ManagerHomePage from './component/ManagerHomePage';
 import AddServices from './component/AddServices';
 import AssignCounter from './component/AssignCounter';
 import CounterExecutive from './component/CounterExecutive';
+import CatchAll from './component/CatchAll';
+import { Slide, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   { path: '/', element: <HomePage /> },
@@ -16,8 +19,9 @@ const router = createBrowserRouter([
   { path: '/assignCounter', element: <AssignCounter /> },
   { path: '/CELogin', element: <CELogin /> },
   { path: '/MLogin', element: <MLogin /> },
-  { path: '/CounterExecutive', element: <CounterExecutive/> },
+  { path: '/CounterExecutive', element: <CounterExecutive /> },
   { path: '/tokenGeneration', element: <TokenGeneration /> },
+  { path: '/CatchAll', element: <CatchAll /> },
   { path: '/CounterExecutive', element: <CounterExecutive /> },
 ])
 
@@ -25,13 +29,19 @@ function App() {
   return (
     <div>
       <RouterProvider router={router} />
-      {/* <AssignCounter></AssignCounter>
-      <AddServices></AddServices>
-      <ManagerHomePage></ManagerHomePage>
-      <TokenGeneration></TokenGeneration>
-      <CELogin></CELogin>
-      <HomePage></HomePage>
-      <MLogin></MLogin> */}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        transition={Slide}
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 }
