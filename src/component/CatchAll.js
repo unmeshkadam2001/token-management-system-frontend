@@ -16,7 +16,7 @@ export default function CatchAll() {
   const [counterId, setCounterId] = useState();
   const [resolvedResponse, setResolvedResponse] = useState();
   const [tokenIdOfSelected, setTokenIdOfSelected] = useState();
-  const [timeRemaining, setTimeRemaining] = useState(60);
+  const [timeRemaining, setTimeRemaining] = useState(20);
   const [isPaused, setIsPaused] = useState(false);
   const [startTimer, setStartTimer] = useState(false);
 
@@ -34,8 +34,8 @@ export default function CatchAll() {
       if (startTimer && !isPaused) {
         setTimeRemaining((timeRemaining) => timeRemaining - 1);
         if (timeRemaining === 0) {
-          nextToken();
-          setTimeRemaining(60);
+          // nextToken();
+          setTimeRemaining(20);
         }
       }
     }, 1000);
@@ -44,7 +44,7 @@ export default function CatchAll() {
 
   useEffect(() => {
     if (resolvedResponse) {
-      setTimeRemaining(60);
+      setTimeRemaining(20);
       setStartTimer(false);
     }
   }, [resolvedResponse]);
@@ -102,7 +102,7 @@ export default function CatchAll() {
     console.log(waitingQueueFlag, " :Flag status");
     setQueueFlag(false);
     setTokenIdOfSelected(waitingQueue[0].tokenId);
-    setTimeRemaining(60);
+    setTimeRemaining(20);
     setStartTimer(true);
   }
 
@@ -118,7 +118,7 @@ export default function CatchAll() {
     console.log(
       "this is in choose from queue with queue[0] is  " + queue[0].tokenId
     );
-    setTimeRemaining(60);
+    setTimeRemaining(20);
     setStartTimer(true);
   }
 

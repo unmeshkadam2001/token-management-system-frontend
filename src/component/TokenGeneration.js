@@ -133,17 +133,13 @@ function TokenGeneration() {
     };
     axios
       .post("http://localhost:8080/generateToken", data)
-      .then((response) => {           
-        toast.success(response.data, {
-          icon:"✌️"
-        });        
+      .then((response) => {
+        console.log(response.data);
+        settokenID(response.data);
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Error while Generating token...", {
-           icon:"❌"
-        });
-        setMessage(error);
+        settokenID(error);
       });
   };
 
