@@ -16,7 +16,7 @@ export default function CounterExecutive() {
   const [counterId, setCounterId] = useState(0);
   const [resolvedResponse, setResolvedResponse] = useState();
   const [tokenIdOfSelected, setTokenIdOfSelected] = useState();
-  const [timeRemaining, setTimeRemaining] = useState(60);
+  const [timeRemaining, setTimeRemaining] = useState(20);
   const [isPaused, setIsPaused] = useState(false);
   const [startTimer, setStartTimer] = useState(false);
   const [count, setCount] = useState();
@@ -35,8 +35,8 @@ export default function CounterExecutive() {
       if (startTimer && !isPaused) {
         setTimeRemaining((timeRemaining) => timeRemaining - 1);
         if (timeRemaining === 0) {
-          nextToken();
-          setTimeRemaining(60);
+          // nextToken();
+          setTimeRemaining(20);
         }
       }
     }, 1000);
@@ -45,7 +45,7 @@ export default function CounterExecutive() {
 
   useEffect(() => {
     if (resolvedResponse) {
-      setTimeRemaining(60);
+      setTimeRemaining(20);
       setStartTimer(false);
     }
   }, [resolvedResponse]);
@@ -64,13 +64,6 @@ export default function CounterExecutive() {
         autoClose: 2000,
         icon: "😅",
       });
-      // toast.info(
-      //   "Please enter some tokens inside queue to use the given functionalities..!",
-      //   {
-      //     delay: 3000,
-      //     icon: "📥",
-      //   }
-      // );
       return true;
     } else {
       return false;
@@ -142,7 +135,7 @@ export default function CounterExecutive() {
           console.log(response.data);
         });
     }
-    setTimeRemaining(60);
+    setTimeRemaining(20);
   }
 
   function chooseFromWaitingQueue() {
@@ -153,7 +146,7 @@ export default function CounterExecutive() {
     setTokenIdOfSelected(waitingQueue[0].tokenId);
 
     // start the timer
-    setTimeRemaining(60);
+    setTimeRemaining(20);
     setStartTimer(true);
   }
 
@@ -171,12 +164,12 @@ export default function CounterExecutive() {
     );
 
     // start the timer
-    setTimeRemaining(60);
+    setTimeRemaining(20);
     setStartTimer(true);
   }
 
   function resolved() {
-    setTimeRemaining(60);
+    setTimeRemaining(20);
     axios
       .get(`http://localhost:8080/resolved?tokenId=${tokenIdOfSelected}`)
       .then((response) => {

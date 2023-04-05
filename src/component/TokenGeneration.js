@@ -1,13 +1,87 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import ReactDOM from "react-dom";
 import { toast } from "react-toastify";
+
+function TokenDetails({ token }) {
+  return (
+    <div style={{ backgroundColor: 'lightgray', padding: '10px' , width:"430px" }}>
+      <div>
+        <table style={{ border: '1px solid black'}}>
+          <tbody>
+            <tr>
+              <th style={{ borderRight: '1px solid black' }}>
+                ID
+              </th>
+              <td>{token.tokenId}</td>
+            </tr>
+            <tr>
+              <th style={{ borderRight: '1px solid black' }}>
+                Service:
+              </th>
+              <td>{token.serviceDescription}</td>
+            </tr>
+            <tr>
+              <th style={{ borderRight: '1px solid black' }}>
+                Token Generation Time:
+              </th>
+              <td>{token.tokenGenerationTime}</td>
+            </tr>
+            <tr>
+              <th style={{ borderRight: '1px solid black' }}>
+                Expected Waiting Time:
+              </th>
+              <td>{token.expectedWaitingTime}</td>
+            </tr>
+            <tr>
+              <th style={{ borderRight: '1px solid black' }}>
+                Status:
+              </th>
+              <td>{token.status}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+
+
 
 function TokenGeneration() {
   const [servicesData, setServicesData] = useState([]);
   const [selectedType, setSelectedType] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
   const [selectedServiceId, setSelectedServiceId] = useState("");
-  const [message, setMessage] = useState("");
+  const [tokenID, settokenID] = useState("");
+  const [tokenDetails, setTokenDetails] = useState(null);
+  const [error, setError] = useState(null);
+
+  const printToken = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/requestingSpecificTokenBasedOnTokenId?tokenId=${tokenID}`
+      );
+      const data = response.data;
+      setTokenDetails(data);
+      console.log(data);
+      console.log(data.serviceDescription);
+      const newWindow = window.open();
+      newWindow.document.write(
+        "<html><head><title>Token Details</title><style>body { font-family: sans-serif; }</style></head><body>"
+      );
+      newWindow.document.write("<div>");
+      ReactDOM.render(
+        <TokenDetails token={data} />,
+        newWindow.document.body.appendChild(document.createElement("div"))
+      );
+      newWindow.document.write("</div></body></html>");
+      newWindow.print();
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   useEffect(() => {
     axios
@@ -59,24 +133,20 @@ function TokenGeneration() {
     };
     axios
       .post("http://localhost:8080/generateToken", data)
-      .then((response) => {           
-        toast.success(response.data, {
-          icon:"✌️"
-        });        
+      .then((response) => {
+        console.log(response.data);
+        settokenID(response.data);
       })
       .catch((error) => {
         console.log(error);
-        toast.error("Error while Generating token...", {
-           icon:"❌"
-        });
-        setMessage(error);
+        settokenID(error);
       });
   };
 
   return (
     <div>
       <section class="bg-gray-50 dark:bg-gray-900 h-screen">
-        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+        <div class=" flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <a
             href="#"
             class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
@@ -89,7 +159,7 @@ function TokenGeneration() {
             Pratiti
           </a>
           <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <div class="p-6 space-y-4 md:space-y-1 sm:p-5">
               <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                 Token Generation
               </h1>
@@ -158,7 +228,7 @@ function TokenGeneration() {
                   </div>
                 )}
               </div>
-              {message && (
+              {tokenID && (
                 <div
                   class="flex p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
                   role="alert"
@@ -177,7 +247,25 @@ function TokenGeneration() {
                     ></path>
                   </svg>
                   <span class="sr-only">Info</span>
-                  <div>{message}</div>
+                  <div>
+                    <p>
+                      Token Generated Succesfully! Your Token Id is: {tokenID}
+                    </p>
+                    <br></br>
+                    <div>
+                      <button
+                        style={{ marginLeft: "85px" }}
+                        type="button"
+                        onClick={printToken}
+                        class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800"
+                      >
+                        <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                          Print Token
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                  <br></br>
                 </div>
               )}
             </div>
