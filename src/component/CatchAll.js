@@ -102,6 +102,7 @@ export default function CatchAll() {
     console.log(waitingQueueFlag, " :Flag status");
     setQueueFlag(false);
     setTokenIdOfSelected(waitingQueue[0].tokenId);
+    console.log("selected", tokenIdOfSelected);
     setTimeRemaining(20);
     setStartTimer(true);
   }
@@ -281,14 +282,14 @@ export default function CatchAll() {
                         onClick={chooseFromQueue}
                         className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
                       >
-                        Queue
+                        Call from Queue
                       </button>
                       <button
                         type="button"
                         onClick={chooseFromWaitingQueue}
                         className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2"
                       >
-                        Waiting Queue
+                        Call from Waiting Queue
                       </button>
                     </div>
                     <p className="text-sky-400">
@@ -341,6 +342,12 @@ export default function CatchAll() {
                           >
                             Service Id
                           </th>
+                          <th
+                            className="border border-slate-600 px-6 py-3"
+                            scope="col"
+                          >
+                            Frequency
+                          </th>
                         </tr>
                       </thead>
                       {queue.map((token) => (
@@ -357,6 +364,9 @@ export default function CatchAll() {
                             </td>
                             <td className="border border-slate-600">
                               {token.serviceId}
+                            </td>
+                            <td className="border border-slate-600">
+                              {token.count}
                             </td>
                           </tr>
                         </tbody>
@@ -376,6 +386,9 @@ export default function CatchAll() {
                           <th className="border border-slate-600 px-6 py-3">
                             Service Id
                           </th>
+                          <th className="border border-slate-600 px-6 py-3">
+                            Frequency
+                          </th>
                         </tr>
                       </thead>
 
@@ -393,6 +406,9 @@ export default function CatchAll() {
                             </td>
                             <td className="border border-slate-600">
                               {waitingQueue.serviceId}
+                            </td>
+                            <td className="border border-slate-600">
+                              {waitingQueue.count}
                             </td>
                           </tr>
                         </tbody>

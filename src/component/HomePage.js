@@ -87,7 +87,7 @@ export default function HomePage() {
         <div class="mx-auto max-w-screen-xl">
           <div class="md:flex md:justify-between">
             <div class="mb-6 md:mb-0">
-              <a href="https://flowbite.com" class="flex items-center">
+              <a href="#" class="flex items-center">
                 <img
                   src="https://flowbite.com/docs/images/logo.svg"
                   class="mr-3 h-8"
@@ -105,7 +105,7 @@ export default function HomePage() {
                 </h2>
                 <ul class="text-gray-600 dark:text-gray-400">
                   <li class="mb-4">
-                    <a href="https://flowbite.com" class="hover:underline">
+                    <a href="#" class="hover:underline">
                       Pratiti
                     </a>
                   </li>
@@ -119,7 +119,7 @@ export default function HomePage() {
                 <ul class="text-gray-600 dark:text-gray-400">
                   <li class="mb-4">
                     <a
-                      href="https://github.com/themesberg/flowbite"
+                      href="#"
                       class="hover:underline "
                     >
                       Github
@@ -127,7 +127,7 @@ export default function HomePage() {
                   </li>
                   <li>
                     <a
-                      href="https://discord.gg/4eeurUVvTy"
+                      href="#"
                       class="hover:underline"
                     >
                       LinkedIn
@@ -158,7 +158,7 @@ export default function HomePage() {
           <div class="sm:flex sm:items-center sm:justify-between">
             <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">
               © 2022{" "}
-              <a href="https://flowbite.com" class="hover:underline">
+              <a href="#" class="hover:underline">
                 Flowbite™
               </a>
               . All Rights Reserved.

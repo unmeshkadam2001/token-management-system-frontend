@@ -118,13 +118,14 @@ export default function CounterExecutive() {
   function nextToken() {
     if (waitingQueueFlag == true) {
       console.log("Waiting Queue: " + tokenId);
+     
+      const first = waitingQueue[0];
+      setWaitingQueue(([first, ...rest]) => [...rest, first]);
       axios
-      .get(`http://localhost:8080/statusWaiting?tokenId=${tokenId}`)
+      .get(`http://localhost:8080/statusWaiting?tokenId=${ waitingQueue[0].tokenId}`)
       .then((response) => {
         console.log(response.data);
       });
-      const first = waitingQueue[0];
-      setWaitingQueue(([first, ...rest]) => [...rest, first]);
       console.log("inside next token waiting queue flag is true");
       // fetchWaitingQueue();
     } else {
@@ -141,10 +142,10 @@ export default function CounterExecutive() {
   function chooseFromWaitingQueue() {
     console.log("inside waiting queue flag...");
     setWaitingQueueFlag(true);
-    console.log(waitingQueueFlag, " :Flag status");
+    console.log(waitingQueueFlag, " :waiting queue Flag status");
     setQueueFlag(false);
     setTokenIdOfSelected(waitingQueue[0].tokenId);
-
+    console.log(waitingQueue[0].tokenId);
     // start the timer
     setTimeRemaining(20);
     setStartTimer(true);
@@ -388,6 +389,12 @@ export default function CounterExecutive() {
                           >
                             Service Id
                           </th>
+                          <th
+                            className="border border-slate-600 px-6 py-3"
+                            scope="col"
+                          >
+                            Frequency
+                          </th>
                         </tr>
                       </thead>
                       {queue.map((token) => (
@@ -404,6 +411,9 @@ export default function CounterExecutive() {
                             </td>
                             <td className="border border-slate-600">
                               {token.serviceId}
+                            </td>
+                            <td className="border border-slate-600">
+                              {token.count}
                             </td>
                           </tr>
                         </tbody>
@@ -423,6 +433,9 @@ export default function CounterExecutive() {
                           <th className="border border-slate-600 px-6 py-3">
                             Service Id
                           </th>
+                          <th className="border border-slate-600 px-6 py-3">
+                            Frequency
+                          </th>
                         </tr>
                       </thead>
 
@@ -440,6 +453,9 @@ export default function CounterExecutive() {
                             </td>
                             <td className="border border-slate-600">
                               {waitingQueue.serviceId}
+                            </td>
+                            <td className="border border-slate-600">
+                              {waitingQueue.count}
                             </td>
                           </tr>
                         </tbody>

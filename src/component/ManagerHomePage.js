@@ -58,8 +58,8 @@ function ManagerHomePage() {
                     </h5>
                   </a>
                   <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    Here are the biggest enterprise technology acquisitions of
-                    2021 so far.
+                    Click here to add the type of services and the
+                    sub services.
                   </p>
                   <a
                     href="/addServices"
@@ -89,8 +89,8 @@ function ManagerHomePage() {
                     </h5>
                   </a>
                   <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    Here is another big enterprise technology acquisition of
-                    2021.
+                    Click here to add counter Executive and 
+                    assign counter to him.
                   </p>
                   <a
                     href="/assignCounter"
