@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function TokenGeneration() {
   const [servicesData, setServicesData] = useState([]);
@@ -58,12 +59,16 @@ function TokenGeneration() {
     };
     axios
       .post("http://localhost:8080/generateToken", data)
-      .then((response) => {
-        console.log(response.data);
-        setMessage(response.data);
+      .then((response) => {           
+        toast.success(response.data, {
+          icon:"✌️"
+        });        
       })
       .catch((error) => {
         console.log(error);
+        toast.error("Error while Generating token...", {
+           icon:"❌"
+        });
         setMessage(error);
       });
   };
