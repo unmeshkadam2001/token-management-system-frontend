@@ -19,7 +19,7 @@ export default function CounterExecutive() {
   const [timeRemaining, setTimeRemaining] = useState(20);
   const [isPaused, setIsPaused] = useState(false);
   const [startTimer, setStartTimer] = useState(false);
-  const [count, setCount] = useState(3);
+  const [count, setCount] = useState();
 
   useEffect(() => {
     let counterExecutiveId = localStorage.getItem("id");
@@ -100,25 +100,31 @@ export default function CounterExecutive() {
         
         if (!isQueueEmpty(response.data.length)) {
           console.log(response.data);
+          setCount(response.data[0].count);
+          console.log("Remaining Counts: "+count)
           setWaitingQueue(response.data);
           setWaitingQueueFlag(true);
           setDisplayWaitingQueueFlag(true);
           setQueueFlag(false);
           setDisplayQueueFlag(false);
+          setTokenId(response.data[0].tokenId);
+          if(count == 1){
+            toast.warning("Token No: "+ tokenId + " is removed from the queue...")
+          }
         }
       });
   }
 
   function nextToken() {
     if (waitingQueueFlag == true) {
-      const first = waitingQueue[0];
-      console.log(first.tokenId);
-      setWaitingQueue(([first, ...rest]) => [...rest, first]);
+      console.log("Waiting Queue: " + tokenId);
       axios
       .get(`http://localhost:8080/statusWaiting?tokenId=${tokenId}`)
       .then((response) => {
         console.log(response.data);
       });
+      const first = waitingQueue[0];
+      setWaitingQueue(([first, ...rest]) => [...rest, first]);
       console.log("inside next token waiting queue flag is true");
       // fetchWaitingQueue();
     } else {
