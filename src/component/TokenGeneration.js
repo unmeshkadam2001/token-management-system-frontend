@@ -1,50 +1,49 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReactDOM from "react-dom";
-import { toast } from "react-toastify";
 
-function TokenDetails({ token }) {
-  return (
-    <div style={{ backgroundColor: 'lightgray', padding: '10px' , width:"430px" }}>
-      <div>
-        <table style={{ border: '1px solid black'}}>
-          <tbody>
-            <tr>
-              <th style={{ borderRight: '1px solid black' }}>
-                ID
-              </th>
-              <td>{token.tokenId}</td>
-            </tr>
-            <tr>
-              <th style={{ borderRight: '1px solid black' }}>
-                Service:
-              </th>
-              <td>{token.serviceDescription}</td>
-            </tr>
-            <tr>
-              <th style={{ borderRight: '1px solid black' }}>
-                Token Generation Time:
-              </th>
-              <td>{token.tokenGenerationTime}</td>
-            </tr>
-            <tr>
-              <th style={{ borderRight: '1px solid black' }}>
-                Expected Waiting Time:
-              </th>
-              <td>{token.expectedWaitingTime}</td>
-            </tr>
-            <tr>
-              <th style={{ borderRight: '1px solid black' }}>
-                Status:
-              </th>
-              <td>{token.status}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
+// function TokenDetails({ token }) {
+//   return (
+//     <div style={{ backgroundColor: 'lightgray', padding: '10px' , width:"430px" }}>
+//       <div>
+//         <table style={{ border: '1px solid black'}}>
+//           <tbody>
+//             <tr>
+//               <th style={{ borderRight: '1px solid black' }}>
+//                 ID
+//               </th>
+//               <td>{token.tokenId}</td>
+//             </tr>
+//             <tr>
+//               <th style={{ borderRight: '1px solid black' }}>
+//                 Service:
+//               </th>
+//               <td>{token.serviceDescription}</td>
+//             </tr>
+//             <tr>
+//               <th style={{ borderRight: '1px solid black' }}>
+//                 Token Generation Time:
+//               </th>
+//               <td>{token.tokenGenerationTime}</td>
+//             </tr>
+//             <tr>
+//               <th style={{ borderRight: '1px solid black' }}>
+//                 Expected Waiting Time:
+//               </th>
+//               <td>{token.expectedWaitingTime}</td>
+//             </tr>
+//             <tr>
+//               <th style={{ borderRight: '1px solid black' }}>
+//                 Status:
+//               </th>
+//               <td>{token.status}</td>
+//             </tr>
+//           </tbody>
+//         </table>
+//       </div>
+//     </div>
+//   );
+// }
 
 
 
@@ -58,36 +57,37 @@ function TokenGeneration() {
   const [tokenDetails, setTokenDetails] = useState(null);
   const [error, setError] = useState(null);
 
-  const printToken = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/requestingSpecificTokenBasedOnTokenId?tokenId=${tokenID}`
-      );
-      const data = response.data;
-      setTokenDetails(data);
-      console.log(data);
-      console.log(data.serviceDescription);
-      const newWindow = window.open();
-      newWindow.document.write(
-        "<html><head><title>Token Details</title><style>body { font-family: sans-serif; }</style></head><body>"
-      );
-      newWindow.document.write("<div>");
-      ReactDOM.render(
-        <TokenDetails token={data} />,
-        newWindow.document.body.appendChild(document.createElement("div"))
-      );
-      newWindow.document.write("</div></body></html>");
-      newWindow.print();
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+  // const printToken = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:8080/requestingSpecificTokenBasedOnTokenId?tokenId=${tokenID}`
+  //     );
+  //     const data = response.data;
+  //     setTokenDetails(data);
+  //     console.log(data);
+  //     console.log(data.serviceDescription);
+  //     const newWindow = window.open();
+  //     newWindow.document.write(
+  //       "<html><head><title>Token Details</title><style>body { font-family: sans-serif; }</style></head><body>"
+  //     );
+  //     newWindow.document.write("<div>");
+  //     ReactDOM.render(
+  //       <TokenDetails token={data} />,
+  //       newWindow.document.body.appendChild(document.createElement("div"))
+  //     );
+  //     newWindow.document.write("</div></body></html>");
+  //     newWindow.print();
+  //   } catch (error) {
+  //     setError(error.message);
+  //   }
+  // };
 
   useEffect(() => {
     axios
       .get("http://localhost:8080/getServicesTypesForTokenGeneration")
       .then((response) => {
         setServicesData(response.data);
+        
       })
       .catch((error) => {
         console.log(error);
@@ -252,7 +252,7 @@ function TokenGeneration() {
                       Token Generated Succesfully! Your Token Id is: {tokenID}
                     </p>
                     <br></br>
-                    <div>
+                    {/* <div>
                       <button
                         style={{ marginLeft: "85px" }}
                         type="button"
@@ -263,7 +263,7 @@ function TokenGeneration() {
                           Print Token
                         </span>
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                   <br></br>
                 </div>
