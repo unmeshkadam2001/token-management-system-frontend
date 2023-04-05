@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function MLogin() {
   const navigate = useNavigate();
@@ -20,10 +21,21 @@ export default function MLogin() {
       localStorage.setItem("usernameManager", username);
       localStorage.setItem("passwordManager", password);
       sessionStorage.setItem("accessTokenManager", "true");
-      navigate("/ManagerHomePage");
-      // alert("success");
+      const resolveAfter3Sec = new Promise((resolve) =>
+      setTimeout(resolve, 1000)
+    );
+      toast.promise(resolveAfter3Sec, {
+        pending: "Login is pending ",
+        success: "Login Successful 👌",
+        error: "Login Rejected 🤯",
+      });
+      setTimeout(() => {
+        navigate("/ManagerHomePage");
+      }, 1000);
+        
+      
     } else {
-      alert("Enter Valid Credentials...:(");
+      toast.error("Enter Valid Credentials...",{icon:"😒"})
     }
   }
 

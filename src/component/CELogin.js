@@ -39,22 +39,34 @@ export default function CELogin(props) {
             setTimeout(resolve, 1000)
           );
           toast.promise(resolveAfter3Sec, {
-            pending: "Login is pending",
+            pending: "Login is pending ",
             success: "Login Successful 👌",
             error: "Login Rejected 🤯",
           });
           setTimeout(() => {
             navigate("/CatchAll");
           }, 1000);
-        } else if (response.data.status === true) {
-          toast("Counter Executive Logged in Successfully!", {
-            type: "success",
-          });
           toast("Welcome " + response.data.name + "!, You are good to go...", {
             type: "success",
-            delay: 5000,
+            delay: 2500,
           });
+        } else if (response.data.status === true) {
+         
+          toast("Welcome " + response.data.name + "!, You are good to go...", {
+            type: "success",
+            delay: 2200,
+          });
+          const resolveAfter3Sec = new Promise((resolve) =>
+          setTimeout(resolve, 1000)
+        );
+        toast.promise(resolveAfter3Sec, {
+          pending: "Login is pending ",
+          success: "Login Successful 👌",
+          error: "Login Rejected 🤯",
+        });
+        setTimeout(() => {
           navigate("/CounterExecutive");
+        }, 1000);
         } else {  
           toast("Invalid Credentials...😵");
         }
@@ -113,7 +125,7 @@ export default function CELogin(props) {
                     id="form2Example2"
                     onChange={passwordInput}
                     // className="form-control"
-                    placeholder="••••••••"
+                    placeholder="Enter your Password..."
                     className="bg-gray-50 border form-control border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required=""
                   ></input>
