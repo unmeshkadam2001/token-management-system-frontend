@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function AddServices() {
   const [typeOfService, setTypeOfService] = useState("");
@@ -52,11 +53,13 @@ function AddServices() {
     await axios
       .post("http://localhost:8080/addService", data)
       .then((response) => {
-        setMessage("Servies added successfully!");
+        // setMessage("Servies added successfully!");
+        toast.success("Services added successfully...!", { icon:"✌️" })
       })
       .catch((error) => {
         console.log(error);
-        setMessage("Inserting services failed!");
+        // setMessage("Inserting services failed!");
+        toast.error("Failed to insert services!", { icon:"❌" })
       });
   };
 
@@ -165,7 +168,7 @@ function AddServices() {
                     </span>
                   </button>
                 </div>
-                {message && (
+                {/* {message && (
                   <div
                     class="flex p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
                     role="alert"
@@ -186,7 +189,7 @@ function AddServices() {
                     <span class="sr-only">Info</span>
                     <div>{message}</div>
                   </div>
-                )}
+                )} */}
               </form>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 function AssignCounter() {
   const [serviceTypes, setServiceTypes] = useState([]);
@@ -25,7 +26,7 @@ function AssignCounter() {
 
     // check if all fields have a value
     if (!counterExecutiveName || !password || !serviceTypeId) {
-      alert("All fields are required");
+      toast.warning("All fields are required");
       return;
     }
 
@@ -37,11 +38,13 @@ function AssignCounter() {
     axios
       .post("http://localhost:8080/assignCounter", data)
       .then((response) => {
-        setMessage("Counter assigned successfully.");
+        // setMessage("Counter assigned successfully.");
+        toast.success(response.data, {icon:"✌️"});
       })
       .catch((error) => {
         console.log(error);
-        setMessage("Counter assignment failed.");
+        toast.error("Counter Assignment Failed!", {icon:"❌"})
+        // setMessage("Counter assignment failed.");
       });
   };
 
@@ -137,7 +140,7 @@ function AssignCounter() {
                     </span>
                   </button>
                 </div>
-                {message && (
+                {/* {message && (
                   <div
                     class="flex p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
                     role="alert"
@@ -158,7 +161,7 @@ function AssignCounter() {
                     <span class="sr-only">Info</span>
                     <div>{message}</div>
                   </div>
-                )}
+                )} */}
               </form>
             </div>
           </div>
