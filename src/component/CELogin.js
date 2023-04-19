@@ -34,7 +34,7 @@ export default function CELogin(props) {
         localStorage.setItem("password", password);
         sessionStorage.setItem("accessToken", "true");
         localStorage.setItem("id", response.data.id);
-        if (username=="catchAll" && password=="catchAll@123") {
+        if (username=="catchAll" && password=="catchAll") {
           const resolveAfter3Sec = new Promise((resolve) =>
             setTimeout(resolve, 1000)
           );
@@ -46,7 +46,7 @@ export default function CELogin(props) {
           setTimeout(() => {
             navigate("/CatchAll");
           }, 1000);
-          toast("Welcome " + response.data.name + "!, You are good to go...", {
+          toast("Welcome CatchAll !, You are good to go...", {
             type: "success",
             delay: 2500,
           });
